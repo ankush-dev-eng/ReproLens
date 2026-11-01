@@ -35,7 +35,7 @@ with c_btn1:
     if st.button("📌 pallets/click #3019", use_container_width=True):
         st.session_state["field_repo"] = "pallets/click"
         st.session_state["field_issue"] = "https://github.com/pallets/click/issues/3019"
-        st.session_state["field_commit"] = "27aaed3fe5bcd6adedd6e91de234914af9859cf1"
+        st.session_state["field_commit"] = "c096a10e8b59e48f77c65372a9c17f8226c128c5"
         st.rerun()
 
 with c_btn2:
@@ -74,7 +74,7 @@ with st.form("new_investigation_form"):
     commit_sha = st.text_input(
         "Base Commit SHA (Optional)",
         value=st.session_state.get("field_commit", ""),
-        placeholder="e.g. 27aaed3fe5bcd6adedd6e91de234914af9859cf1",
+        placeholder="e.g. c096a10e8b59e48f77c65372a9c17f8226c128c5",
         help="Exact commit to check out. If left blank, ReproLens resolves the last commit before the issue was opened.",
     )
 

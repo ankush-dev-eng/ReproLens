@@ -64,7 +64,7 @@ def test_new_investigation_submission(tmp_path, monkeypatch):
     # Fill in inputs
     at.text_input[0].input("pallets/click")
     at.text_input[1].input("https://github.com/pallets/click/issues/3019")
-    at.text_input[2].input("27aaed3fe5bcd6adedd6e91de234914af9859cf1")
+    at.text_input[2].input("c096a10e8b59e48f77c65372a9c17f8226c128c5")
 
     # AppTest form submit
     at.button[3].click()  # Form submit button (first 3 buttons are benchmark samples)
@@ -128,7 +128,7 @@ def test_components_render_without_error(tmp_path, monkeypatch):
         repo="pallets/click",
         issue_number=3019,
         issue_url="https://github.com/pallets/click/issues/3019",
-        commit_sha="27aaed3",
+        commit_sha="c096a10",
         issue_summary="Test investigation",
         final_status=InvestigationStatus.REPRODUCED,
         mode=ExecutionMode.DEMO,

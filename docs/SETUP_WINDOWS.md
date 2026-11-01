@@ -116,7 +116,7 @@ ReproLens provides a complete CLI interface via `python -m reprolens`:
 ### 6.1 Reproduce an Issue
 ```powershell
 # Triage and reproduce an issue directly
-python -m reprolens reproduce https://github.com/pallets/click/issues/3019 --commit 27aaed3fe5bcd6adedd6e91de234914af9859cf1
+python -m reprolens reproduce https://github.com/pallets/click/issues/3019 --commit c096a10e8b59e48f77c65372a9c17f8226c128c5
 ```
 
 ### 6.2 Inspect System and Investigation Status

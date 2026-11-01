@@ -156,7 +156,7 @@ def test_cli_bisect_command(tmp_path, monkeypatch):
         repo="pallets/click",
         issue_number=3019,
         issue_url="https://github.com/pallets/click/issues/3019",
-        commit_sha="27aaed3",
+        commit_sha="c096a10",
         issue_summary="Bisect test",
         final_status=InvestigationStatus.REPRODUCED,
     )

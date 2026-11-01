@@ -44,18 +44,20 @@
 
 ## 📊 Benchmark Evaluation Leaderboard
 
-Tested against our curated benchmark suite of historical issues across major open-source Python libraries (`pallets/click`, `psf/requests`, `marshmallow-code/marshmallow`, `pallets/jinja`, `urllib3/urllib3`, `pallets/flask`):
+Tested against verified pure-Python issues (`pallets/click`, `pytest-dev/pytest-mock`, `tox-dev/pipdeptree`).
 
-| Evaluation Metric | ReproLens Score | Target Benchmark | Verification |
-| :--- | :---: | :---: | :---: |
-| **Reproduction Rate (Positive Cases)** | **100.0%** (6/6) | > 75.0% | ✅ Confirmed |
-| **Fail-to-Pass Rate (Ground Truth Verified)** | **100.0%** (6/6) | > 80.0% | ✅ Confirmed |
-| **False Reproduction Rate (Negative Controls)** | **0.0%** (0/2) | < 5.0% | ✅ Confirmed |
-| **Invalid Test Rate (Static Guard Rejections)** | **0.0%** (0/8) | < 10.0% | ✅ Confirmed |
-| **Environment Error Rate** | **0.0%** (0/8) | < 5.0% | ✅ Confirmed |
-| **Estimated Cost per Triage** | **$0.0055** | < $0.05 | ✅ Confirmed |
+> **Audit Disclosure**: In adherence to strict transparency contracts, evaluation results are partitioned by execution mode:
+> - **Live Runs (Docker + OpenRouter)**: Reported only when live container daemon and API credentials are available; never estimated or substituted.
+> - **Recorded Playback (Demo Mode)**: Deterministic, inspected reproduction artifacts for offline demonstration.
 
-*Full evaluation report available at [docs/BENCHMARK_REPORT.md](docs/BENCHMARK_REPORT.md).*
+| Benchmark Case | Repository | Issue Date | Base SHA | Fix SHA | Status |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| `click-3019` | `pallets/click` | 2025-07-28 | `c096a10` | `8533c96` | ✅ Verified Live / Demo |
+| `click-negative-2841` | `pallets/click` | 2025-01-11 | `e2f2d84` | *None (Clean)* | ✅ Verified Negative Control |
+| `pytest-mock-529` | `pytest-dev/pytest-mock` | 2025-09-05 | `5b29b03` | `184eb19` | ✅ Verified Benchmark |
+| `pipdeptree-494` | `tox-dev/pipdeptree` | 2025-08-01 | `2731b00` | `79cfad3` | ✅ Verified Benchmark |
+
+*Full audited evaluation report and unverified artifact disclosures available at [docs/BENCHMARK_REPORT.md](docs/BENCHMARK_REPORT.md).*
 
 ---
 
@@ -101,7 +103,7 @@ ReproLens provides headless command-line workflows via `python -m reprolens`:
 
 ```powershell
 # Reproduce a specific GitHub issue
-python -m reprolens reproduce https://github.com/pallets/click/issues/3019 --commit 27aaed3fe5bcd6adedd6e91de234914af9859cf1
+python -m reprolens reproduce https://github.com/pallets/click/issues/3019 --commit c096a10e8b59e48f77c65372a9c17f8226c128c5
 
 # Inspect system and investigation status
 python -m reprolens status

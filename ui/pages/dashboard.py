@@ -60,7 +60,7 @@ with col_b1, st.container(border=True):
     if st.button("Triage Click #3019", key="btn_tri_click"):
         st.session_state["field_repo"] = "pallets/click"
         st.session_state["field_issue"] = "https://github.com/pallets/click/issues/3019"
-        st.session_state["field_commit"] = "27aaed3fe5bcd6adedd6e91de234914af9859cf1"
+        st.session_state["field_commit"] = "c096a10e8b59e48f77c65372a9c17f8226c128c5"
         st.switch_page("ui/pages/new_investigation.py")
 
 with col_b2, st.container(border=True):

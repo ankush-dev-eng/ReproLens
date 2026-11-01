@@ -41,7 +41,7 @@ def test_patch_validation_all_gates_pass(tmp_path, monkeypatch):
         repo="pallets/click",
         issue_number=3019,
         issue_url="https://github.com/pallets/click/issues/3019",
-        commit_sha="27aaed3",
+        commit_sha="c096a10",
         issue_summary="Click patch test",
         final_status=InvestigationStatus.REPRODUCED,
     )
@@ -70,7 +70,7 @@ def test_patch_validation_all_gates_pass(tmp_path, monkeypatch):
     res = engine.validate_patch(
         investigation_id="inv-patch-1",
         repo_dir=tmp_path,
-        base_commit="27aaed3",
+        base_commit="c096a10",
         test_source="def test(): pass",
         diff=diff,
     )
@@ -107,7 +107,7 @@ def test_patch_validation_gate1_rejection(tmp_path, monkeypatch):
     res = engine.validate_patch(
         investigation_id="inv-g1",
         repo_dir=tmp_path,
-        base_commit="27aaed3",
+        base_commit="c096a10",
         test_source="def test(): pass",
         diff="--- a/foo.py\n+++ b/foo.py\n@@ -1,1 +1,1 @@\n",
     )
@@ -127,7 +127,7 @@ def test_cli_patch_command(tmp_path, monkeypatch):
         repo="pallets/click",
         issue_number=3019,
         issue_url="https://github.com/pallets/click/issues/3019",
-        commit_sha="27aaed3",
+        commit_sha="c096a10",
         issue_summary="Patch CLI test",
         final_status=InvestigationStatus.REPRODUCED,
     )
