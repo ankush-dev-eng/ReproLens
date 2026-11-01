@@ -33,14 +33,14 @@
 - [x] Benchmark leak guard test (`tests/unit/test_benchmark_guard.py`)
 - [x] Tag `v0.1-slice`
 
-### M2: Streamlit UI (In Progress)
-- [ ] Connect Streamlit UI to real database and background worker subprocess
-- [ ] Implement live polling of SQLite database in Investigation Workspace
-- [ ] Wire up New Investigation submission to start background subprocess worker
-- [ ] Ensure Demo Mode banner and recorded artifact playback work seamlessly
-- [ ] Capture real UI screenshots into `docs/screenshots/`
+### M2: Streamlit UI (Completed)
+- [x] Connect Streamlit UI to real database and background worker subprocess
+- [x] Implement live polling of SQLite database in Investigation Workspace
+- [x] Wire up New Investigation submission to start background subprocess worker
+- [x] Ensure Demo Mode banner and recorded artifact playback work seamlessly
+- [x] Capture real UI screenshots into `docs/screenshots/`
 
-### M3: Benchmark Dataset & Evaluation
+### M3: Benchmark Dataset & Evaluation (In Progress)
 - [ ] Curate 8-10 real issues in `benchmark/manifest.yaml` (incl. 1-2 negative/hard cases)
 - [ ] Evaluation harness (`evaluation.py`)
 - [ ] Generate real `docs/BENCHMARK_REPORT.md`
@@ -59,10 +59,10 @@
 - [ ] Merge `develop` -> `main` with verified tag
 
 ## LAST COMMIT
-- Tag: `v0.1-slice` (branch: `develop`)
+- Commit: Milestone M2 complete (branch: `develop`)
 
 ## NEXT ACTION
-- Milestone M2: Streamlit UI integration, real-time background worker polling, and screenshot generation.
+- Milestone M3: Curate 8-10 real open-source Python benchmark cases in `benchmark/manifest.yaml` and `benchmark_private/`, build evaluation harness in `reprolens/evaluation.py`, and generate `docs/BENCHMARK_REPORT.md`.
 
 ## BLOCKERS
 - **Docker Desktop not installed / running**: `docker` CLI was not found in PATH on the host. Continuing all independent non-Docker work (core engine, AST, LLM, CLI, Streamlit UI, mock sandbox, demo mode, and unit/integration tests). Docker smoke tests will be marked `NOT RUN (Docker unavailable)` until Docker Desktop is started by the user.
