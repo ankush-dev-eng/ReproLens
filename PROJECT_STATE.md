@@ -1,34 +1,35 @@
 # ReproLens Project State
 
 ## CURRENT MILESTONE
-- **M0 Bootstrap**: Repository setup, environment verification, base project layout, dependencies, configuration, SQLite database schema, and test/gate scripts.
+- **M1 Vertical Slice**: Sandbox abstraction, GitHub ingestion, AST indexer & retrieval, OpenRouter LLM client, investigation orchestrator, test guard, reproduction loop, and classifier, verified on one real issue from the CLI.
 
 ## CHECKLIST
-### M0: Bootstrap (In Progress)
+### M0: Bootstrap (Completed)
 - [x] Save master prompt to `docs/MASTER_PROMPT.md`
 - [x] Create `PROJECT_STATE.md`
 - [x] Run environment checks (git, python, docker, gh)
-- [ ] Initialize git repo, create `.gitignore`
-- [ ] Create remote GitHub repository `ankush-dev-eng/ReproLens` (private)
-- [ ] Setup `main` and `develop` branches; push initial scaffold
-- [ ] Create Python 3.12 virtual environment (`.venv`)
-- [ ] Pin `requirements.txt` and `requirements-dev.txt`
-- [ ] Configure `pyproject.toml` (Ruff, pytest, coverage)
-- [ ] Create `.env.example`, `.streamlit/config.toml`, `.streamlit/secrets.toml.example`
-- [ ] Scaffold `reprolens/` package structure with core models, db migrations, and config
-- [ ] Create quality gate scripts (`scripts/check.ps1` and `scripts/check.sh`)
-- [ ] Verify clean test gate run, commit and push to `develop`
+- [x] Initialize git repo, create `.gitignore`
+- [x] Create remote GitHub repository `ankush-dev-eng/ReproLens` (private)
+- [x] Setup `main` and `develop` branches; push initial scaffold
+- [x] Create Python 3.12 virtual environment (`.venv`)
+- [x] Pin `requirements.txt` and `requirements-dev.txt`
+- [x] Configure `pyproject.toml` (Ruff, pytest, coverage)
+- [x] Create `.env.example`, `.streamlit/config.toml`, `.streamlit/secrets.toml.example`
+- [x] Scaffold `reprolens/` package structure with core models, db migrations, and config
+- [x] Create quality gate scripts (`scripts/check.ps1` and `scripts/check.sh`)
+- [x] Verify clean test gate run, commit and push to `develop`
 
-### M1: Vertical Slice (Next)
-- [ ] Sandbox abstraction (`base.py`, `docker_backend.py`, `demo_backend.py`)
-- [ ] GitHub ingestion (`github_client.py`, `models.py`)
+### M1: Vertical Slice (In Progress)
+- [ ] Sandbox abstraction (`base.py`, `docker_backend.py`, `demo_backend.py`, `remote_adapter.py`)
+- [ ] GitHub ingestion (`github_client.py`)
 - [ ] Repository engine & AST indexer (`repo.py`, `indexer.py`, `retrieval.py`, `refs.py`)
 - [ ] OpenRouter LLM client (`llm/client.py`, `llm/prompts.py`, `llm/schemas.py`)
-- [ ] Investigation orchestrator (`investigate.py`)
-- [ ] Reproduction loop & test guard (`repro_loop.py`, `test_guard.py`)
+- [ ] Test guard (`test_guard.py`)
 - [ ] Execution classifier (`classify.py`)
-- [ ] Evidence ledger (`ledger.py`, `db.py`)
-- [ ] End-to-end CLI slice on one real benchmark issue (`cli.py`, `__main__.py`)
+- [ ] Reproduction loop (`repro_loop.py`)
+- [ ] Evidence ledger integration (`ledger.py`)
+- [ ] Investigation worker & CLI (`investigate.py`, `cli.py`)
+- [ ] Select first real benchmark issue and test end-to-end
 - [ ] Tag `v0.1-slice`
 
 ### M2: Streamlit UI
@@ -56,10 +57,10 @@
 - [ ] Merge `develop` -> `main` with verified tag
 
 ## LAST COMMIT
-- None (pre-initial commit)
+- Commit: `40bdb58` on branch `develop` (synchronized with `origin/develop` and `origin/main`)
 
 ## NEXT ACTION
-- Initialize git repo, create `.gitignore`, create remote private repository `ankush-dev-eng/ReproLens`, set branches `main` and `develop`.
+- Implement `reprolens/sandbox/base.py`, `reprolens/sandbox/docker_backend.py`, and `reprolens/sandbox/demo_backend.py` with unit tests.
 
 ## BLOCKERS
 - **Docker Desktop not installed / running**: `docker` CLI was not found in PATH on the host. Continuing all independent non-Docker work (core engine, AST, LLM, CLI, Streamlit UI, mock sandbox, demo mode, and unit/integration tests). Docker smoke tests will be marked `NOT RUN (Docker unavailable)` until Docker Desktop is started by the user.
