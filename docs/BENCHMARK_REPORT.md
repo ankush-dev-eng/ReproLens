@@ -3,11 +3,11 @@
 > **Audit Contract:** Every metric below is derived from verifiable container and test execution logs.
 > No synthetic rates, mock metrics, or hallucinated claims.
 
-**Run ID:** `eval-20261101-072336`  
-**Execution Date:** `2026-11-01 07:23:36 UTC`  
+**Run ID:** `eval-20261101-073957`  
+**Execution Date:** `2026-11-01 07:39:57 UTC`  
 **Evaluation Model:** `anthropic/claude-3.5-sonnet`  
 **Total Cases Evaluated:** `8`  
-**Total Run Duration:** `0.41s`  
+**Total Run Duration:** `0.42s`  
 
 ## 1. Executive Summary & Core Metric Leaderboard
 

@@ -53,20 +53,23 @@
 - [x] Streamlit UI integration (`ui/pages/git_history.py`)
 - [x] Unit & integration tests for bisect (`tests/unit/test_bisect.py`)
 
-### M5: Patch Generation & Validation (In Progress)
-- [ ] Unified diff generation & validation runner (`patching.py`)
-- [ ] Full regression check verification
+### M5: Patch Generation & Validation (Completed)
+- [x] Unified diff generation & 4-gate validation engine (`patching.py`)
+- [x] Baseline invariant check, clean patch application, 3/3 post-patch pass check, zero regression check
+- [x] CLI command (`reprolens patch <inv_id>`)
+- [x] Streamlit UI integration (`ui/pages/repro_patch.py`)
+- [x] Unit & integration tests for patch validation (`tests/unit/test_patching.py`)
 
-### M6: Hardening and Delivery
+### M6: Hardening and Delivery (In Progress)
 - [ ] Documentation (`SETUP_WINDOWS.md`, `ARCHITECTURE.md`, `CONFIGURATION.md`, `SECURITY.md`, `TEST_REPORT.md`, `DEPLOYMENT.md`, `LIMITATIONS.md`)
 - [ ] Security audit & secret scans
 - [ ] Merge `develop` -> `main` with verified tag
 
 ## LAST COMMIT
-- Commit: Milestone M4 complete (branch: `develop`)
+- Commit: Milestone M5 complete (branch: `develop`)
 
 ## NEXT ACTION
-- Milestone M5: Implement 4-gate patch generation and validation engine (`reprolens/patching.py`), CLI command `reprolens patch`, and patch validation tests.
+- Milestone M6: Author comprehensive documentation in `docs/` (`ARCHITECTURE.md`, `SECURITY.md`, `SETUP_WINDOWS.md`, `CONFIGURATION.md`, `DEPLOYMENT.md`, `TEST_REPORT.md`, `LIMITATIONS.md`), run final quality gate, merge `develop` into `main`, and tag final release.
 
 ## BLOCKERS
 - **Docker Desktop not installed / running**: `docker` CLI was not found in PATH on the host. Continuing all independent non-Docker work (core engine, AST, LLM, CLI, Streamlit UI, mock sandbox, demo mode, and unit/integration tests). Docker smoke tests will be marked `NOT RUN (Docker unavailable)` until Docker Desktop is started by the user.

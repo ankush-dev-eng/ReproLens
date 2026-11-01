@@ -3,6 +3,9 @@
 import streamlit as st
 
 from reprolens.db import Database
+from reprolens.models import InvestigationStatus
+from reprolens.patching import PatchEngine
+from reprolens.repo import RepositoryManager
 from ui.theme import render_header
 
 render_header()
@@ -30,7 +33,7 @@ if (
 col_sel, col_link = st.columns([3, 1])
 with col_sel:
     selected_id = st.selectbox(
-        "Select Investigation",
+        "Select Active Investigation",
         inv_ids,
         index=default_idx,
         format_func=lambda i_id: f"{i_id} — {next((i.repo + ' #' + str(i.issue_number or '') for i in investigations if i.id == i_id), i_id)}",
@@ -80,12 +83,8 @@ st.markdown(
     """
 )
 
-# Demo patch view for Click 3019 if applicable
-if inv and "click" in inv.repo:
-    with st.expander("🔎 Preview Candidate Fix Patch (Click #3019 Fix)", expanded=True):
-        sample_patch = """diff --git a/src/click/termui.py b/src/click/termui.py
-index a1b2c3d..e4f5a6b 100644
---- a/src/click/termui.py
+# Default patch for Click 3019
+default_diff = """--- a/src/click/termui.py
 +++ b/src/click/termui.py
 @@ -140,4 +140,6 @@ def prompt(
      if prompt_suffix:
@@ -95,12 +94,52 @@ index a1b2c3d..e4f5a6b 100644
 +        return text
 +    return f"{text} "
 """
-        st.code(sample_patch, language="diff")
 
-        if st.button("🧪 Execute 4-Gate Patch Validation", type="primary"):
+diff_input = st.text_area(
+    "Candidate Fix Patch (Unified Diff)",
+    value=default_diff,
+    height=160,
+    help="Unified diff to apply with git apply against the target revision",
+)
+
+if st.button("🧪 Execute 4-Gate Patch Validation", type="primary"):
+    with st.spinner("Executing 4-gate patch verification in isolated worktree..."):
+        repo_mgr = RepositoryManager()
+        repo_dir = repo_mgr.get_repo_cache_dir(inv.repo)
+        if not repo_dir.exists():
+            repo_dir = repo_mgr.clone_or_fetch(inv.repo)
+
+        engine = PatchEngine(db=db, repo_mgr=repo_mgr)
+        val_res = engine.validate_patch(
+            investigation_id=inv.id,
+            repo_dir=repo_dir,
+            base_commit=inv.commit_sha or "HEAD",
+            test_source=latest.test_source,
+            diff=diff_input,
+        )
+
+        if val_res.gate1_baseline_failed:
             st.success("✅ Gate 1 Passed: Reproducer fails on baseline commit (1/1)")
+        else:
+            st.error("❌ Gate 1 Failed: Reproducer did not fail on baseline")
+
+        if val_res.gate2_patch_applied:
             st.success("✅ Gate 2 Passed: Patch applied cleanly without conflicts")
+        else:
+            st.error("❌ Gate 2 Failed: Patch application rejected")
+
+        if val_res.gate3_post_patch_passed:
             st.success("✅ Gate 3 Passed: Reproducer passes 3/3 times after patch")
+        else:
+            st.error("❌ Gate 3 Failed: Reproducer did not pass 3/3 times after patch")
+
+        if val_res.gate4_regression_clean:
             st.success("✅ Gate 4 Passed: 0 regressions across existing test suite")
+        else:
+            st.error("❌ Gate 4 Failed: Regressions detected")
+
+        if val_res.final_status == InvestigationStatus.PATCH_VALIDATED:
             st.balloons()
-            st.info("Status promoted to **PATCH_VALIDATED**.")
+            st.success("🎉 **VERIFIED**: Investigation status promoted to `PATCH_VALIDATED`!")
+        else:
+            st.warning(f"Outcome: {val_res.final_status.value} — {val_res.details}")

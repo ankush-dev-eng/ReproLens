@@ -47,6 +47,13 @@ def cmd_bisect(args: argparse.Namespace) -> int:
     return 0 if result.success else 1
 
 
+def cmd_patch(args: argparse.Namespace) -> int:
+    """Generate and validate candidate patch for an investigation."""
+    from reprolens.patching import run_patch_cli
+
+    return run_patch_cli(args.investigation_id, patch_file=args.patch_file)
+
+
 def cmd_investigate(args: argparse.Namespace) -> int:
     """Run an investigation in background worker process."""
     inv_id = args.investigation_id
@@ -137,6 +144,14 @@ def main(argv: list[str] | None = None) -> int:
     bisect_parser = subparsers.add_parser("bisect", help="Run automated git bisect")
     bisect_parser.add_argument("investigation_id", help="Investigation ID with reproduced test")
     bisect_parser.set_defaults(func=cmd_bisect)
+
+    # patch
+    patch_parser = subparsers.add_parser("patch", help="Generate and validate candidate fix patch")
+    patch_parser.add_argument("investigation_id", help="Investigation ID to validate patch for")
+    patch_parser.add_argument(
+        "--patch-file", help="Optional path to existing patch diff", default=None
+    )
+    patch_parser.set_defaults(func=cmd_patch)
 
     # evaluate
     eval_parser = subparsers.add_parser("evaluate", help="Run benchmark evaluation")
