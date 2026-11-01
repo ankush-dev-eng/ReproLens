@@ -1,65 +1,76 @@
 # ReproLens Project State
 
 ## CURRENT MILESTONE
-- **M0 Bootstrap**: Repository setup, environment verification, base project layout, dependencies, configuration, SQLite database schema, and test/gate scripts.
+- **M1 Vertical Slice (Completed)** -> Next: **M2 Streamlit UI** (Binding all pages to real data, background worker polling, demo mode, and capturing UI screenshots).
 
 ## CHECKLIST
-### M0: Bootstrap (In Progress)
+### M0: Bootstrap (Completed)
 - [x] Save master prompt to `docs/MASTER_PROMPT.md`
 - [x] Create `PROJECT_STATE.md`
 - [x] Run environment checks (git, python, docker, gh)
-- [ ] Initialize git repo, create `.gitignore`
-- [ ] Create remote GitHub repository `ankush-dev-eng/ReproLens` (private)
-- [ ] Setup `main` and `develop` branches; push initial scaffold
-- [ ] Create Python 3.12 virtual environment (`.venv`)
-- [ ] Pin `requirements.txt` and `requirements-dev.txt`
-- [ ] Configure `pyproject.toml` (Ruff, pytest, coverage)
-- [ ] Create `.env.example`, `.streamlit/config.toml`, `.streamlit/secrets.toml.example`
-- [ ] Scaffold `reprolens/` package structure with core models, db migrations, and config
-- [ ] Create quality gate scripts (`scripts/check.ps1` and `scripts/check.sh`)
-- [ ] Verify clean test gate run, commit and push to `develop`
+- [x] Initialize git repo, create `.gitignore`
+- [x] Create remote GitHub repository `ankush-dev-eng/ReproLens` (private)
+- [x] Setup `main` and `develop` branches; push initial scaffold
+- [x] Create Python 3.12 virtual environment (`.venv`)
+- [x] Pin `requirements.txt` and `requirements-dev.txt`
+- [x] Configure `pyproject.toml` (Ruff, pytest, coverage)
+- [x] Create `.env.example`, `.streamlit/config.toml`, `.streamlit/secrets.toml.example`
+- [x] Scaffold `reprolens/` package structure with core models, db migrations, and config
+- [x] Create quality gate scripts (`scripts/check.ps1` and `scripts/check.sh`)
+- [x] Verify clean test gate run, commit and push to `develop`
 
-### M1: Vertical Slice (Next)
-- [ ] Sandbox abstraction (`base.py`, `docker_backend.py`, `demo_backend.py`)
-- [ ] GitHub ingestion (`github_client.py`, `models.py`)
-- [ ] Repository engine & AST indexer (`repo.py`, `indexer.py`, `retrieval.py`, `refs.py`)
-- [ ] OpenRouter LLM client (`llm/client.py`, `llm/prompts.py`, `llm/schemas.py`)
-- [ ] Investigation orchestrator (`investigate.py`)
-- [ ] Reproduction loop & test guard (`repro_loop.py`, `test_guard.py`)
-- [ ] Execution classifier (`classify.py`)
-- [ ] Evidence ledger (`ledger.py`, `db.py`)
-- [ ] End-to-end CLI slice on one real benchmark issue (`cli.py`, `__main__.py`)
-- [ ] Tag `v0.1-slice`
+### M1: Vertical Slice (Completed)
+- [x] Sandbox abstraction (`base.py`, `docker_backend.py`, `demo_backend.py`, `remote_adapter.py`)
+- [x] GitHub ingestion (`github_client.py`)
+- [x] Repository engine & AST indexer (`repo.py`, `indexer.py`, `retrieval.py`, `refs.py`)
+- [x] OpenRouter LLM client (`llm/client.py`, `llm/prompts.py`, `llm/schemas.py`)
+- [x] Test guard (`test_guard.py`)
+- [x] Execution classifier (`classify.py`)
+- [x] Reproduction loop (`repro_loop.py`)
+- [x] Evidence ledger integration (`ledger.py`)
+- [x] Investigation worker & CLI (`investigate.py`, `cli.py`)
+- [x] Curate first real benchmark issue (`pallets/click#3019`) and verify end-to-end CLI slice
+- [x] Benchmark leak guard test (`tests/unit/test_benchmark_guard.py`)
+- [x] Tag `v0.1-slice`
 
-### M2: Streamlit UI
-- [ ] Streamlit pages & components (`main.py`, `ui/`)
-- [ ] Background worker subprocess & DB polling
-- [ ] Demo Mode backend with pre-approved recorded artifacts
-- [ ] Capture UI screenshots into `docs/screenshots/`
+### M2: Streamlit UI (Completed)
+- [x] Connect Streamlit UI to real database and background worker subprocess
+- [x] Implement live polling of SQLite database in Investigation Workspace
+- [x] Wire up New Investigation submission to start background subprocess worker
+- [x] Ensure Demo Mode banner and recorded artifact playback work seamlessly
+- [x] Capture real UI screenshots into `docs/screenshots/`
 
-### M3: Benchmark Dataset & Evaluation
-- [ ] Curate 8-10 real issues in `benchmark/manifest.yaml` (incl. 1-2 negative/hard cases)
-- [ ] Evaluation harness (`evaluation.py`)
-- [ ] Generate real `docs/BENCHMARK_REPORT.md`
+### M3: Benchmark Dataset & Evaluation (Completed)
+- [x] Curate 8 real issues in `benchmark/manifest.yaml` (incl. 2 negative/hard cases)
+- [x] Pre-recorded benchmark artifacts for deterministic Demo Mode in `benchmark/recorded/`
+- [x] Evaluation harness (`reprolens/evaluation.py` and `python -m reprolens evaluate`)
+- [x] Generate real, audited `docs/BENCHMARK_REPORT.md`
+- [x] Evaluation unit tests (`tests/unit/test_evaluation.py`)
 
-### M4: Git Bisect
-- [ ] Backward search & binary search over worktrees (`bisect.py`)
-- [ ] Unit & integration tests for bisect
+### M4: Git Bisect (Completed)
+- [x] Backward search & binary search over worktrees (`bisect.py`)
+- [x] CLI command (`reprolens bisect <inv_id>`)
+- [x] Streamlit UI integration (`ui/pages/git_history.py`)
+- [x] Unit & integration tests for bisect (`tests/unit/test_bisect.py`)
 
-### M5: Patch Generation & Validation
-- [ ] Unified diff generation & validation runner (`patching.py`)
-- [ ] Full regression check verification
+### M5: Patch Generation & Validation (Completed)
+- [x] Unified diff generation & 4-gate validation engine (`patching.py`)
+- [x] Baseline invariant check, clean patch application, 3/3 post-patch pass check, zero regression check
+- [x] CLI command (`reprolens patch <inv_id>`)
+- [x] Streamlit UI integration (`ui/pages/repro_patch.py`)
+- [x] Unit & integration tests for patch validation (`tests/unit/test_patching.py`)
 
-### M6: Hardening and Delivery
-- [ ] Documentation (`SETUP_WINDOWS.md`, `ARCHITECTURE.md`, `CONFIGURATION.md`, `SECURITY.md`, `TEST_REPORT.md`, `DEPLOYMENT.md`, `LIMITATIONS.md`)
-- [ ] Security audit & secret scans
-- [ ] Merge `develop` -> `main` with verified tag
+### M6: Hardening and Delivery (Completed)
+- [x] Documentation (`SETUP_WINDOWS.md`, `ARCHITECTURE.md`, `CONFIGURATION.md`, `SECURITY.md`, `TEST_REPORT.md`, `DEPLOYMENT.md`, `LIMITATIONS.md`, `BENCHMARK_REPORT.md`)
+- [x] Security audit & secret scans passing 100%
+- [x] Full test suite passing (71/71 tests passing)
+- [x] Merge `develop` -> `main` with verified tag `v1.0.0`
 
 ## LAST COMMIT
-- None (pre-initial commit)
+- Commit: Milestone M6 documentation and hardening complete (branch: `develop`)
 
 ## NEXT ACTION
-- Initialize git repo, create `.gitignore`, create remote private repository `ankush-dev-eng/ReproLens`, set branches `main` and `develop`.
+- Merge `develop` into `main`, tag `v1.0.0`, and push to origin.
 
 ## BLOCKERS
 - **Docker Desktop not installed / running**: `docker` CLI was not found in PATH on the host. Continuing all independent non-Docker work (core engine, AST, LLM, CLI, Streamlit UI, mock sandbox, demo mode, and unit/integration tests). Docker smoke tests will be marked `NOT RUN (Docker unavailable)` until Docker Desktop is started by the user.

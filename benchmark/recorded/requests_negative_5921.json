@@ -1,0 +1,16 @@
+{
+  "case_id": "requests-negative-5921",
+  "repo": "psf/requests",
+  "issue_url": "https://github.com/psf/requests/issues/5921",
+  "base_commit": "1f463ae78326e5e8f47fa0d2aaee0662d08a1d7f",
+  "run_date": "2026-11-01T06:00:00Z",
+  "model_id": "anthropic/claude-3.5-sonnet",
+  "execution_origin": "recorded",
+  "status": "NOT_REPRODUCED",
+  "test_source": "import requests\nfrom unittest.mock import MagicMock\nimport pytest\n\nEXPECTED_SYMPTOM = {\n    \"exception_type\": \"ConnectTimeout\",\n    \"message_regex\": \"Connection timed out\",\n    \"description\": \"Negative control: Timeout reported ignored in stream download\",\n    \"target_symbols\": [\"requests.adapters.HTTPAdapter.send\"],\n}\n\ndef test_reproduce_issue(monkeypatch):\n    s = requests.Session()\n    adapter = requests.adapters.HTTPAdapter()\n    adapter.send = MagicMock(return_value=requests.Response())\n    s.mount('http://', adapter)\n    resp = s.get('http://example.com', timeout=2.5)\n    assert resp is not None\n    assert adapter.send.call_args[1]['timeout'] == 2.5\n",
+  "exit_code": 0,
+  "stdout": "============================= test session starts =============================\ncollected 1 item\n\ntest_repro_issue_5921.py .                                               [100%]\n\n============================== 1 passed in 0.05s ==============================",
+  "stderr": "",
+  "duration_sec": 0.09,
+  "is_timeout": false
+}

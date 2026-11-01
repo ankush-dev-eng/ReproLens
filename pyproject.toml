@@ -28,6 +28,12 @@ dev = [
 [tool.ruff]
 target-version = "py312"
 line-length = 100
+exclude = [
+    ".venv",
+    ".cache_repos",
+    "cache_repos",
+    "benchmark_private",
+]
 
 [tool.ruff.lint]
 select = [
@@ -61,3 +67,4 @@ markers = [
     "slow: marks slow running tests",
     "integration: marks integration tests",
 ]
+

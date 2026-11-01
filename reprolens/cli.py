@@ -7,6 +7,53 @@ from reprolens import __version__
 from reprolens.config import Config
 
 
+def cmd_bisect(args: argparse.Namespace) -> int:
+    """Run automated git bisect for an investigation."""
+    inv_id = args.investigation_id
+    from reprolens.bisect import GitBisectEngine
+    from reprolens.db import Database
+    from reprolens.repo import RepositoryManager
+
+    db = Database()
+    inv = db.get_investigation(inv_id)
+    if not inv:
+        print(f"Investigation {inv_id} not found.")
+        return 1
+
+    attempts = db.list_attempts(inv_id)
+    if not attempts:
+        print(f"No reproducer test available for {inv_id}.")
+        return 1
+
+    repo_mgr = RepositoryManager()
+    repo_dir = repo_mgr.get_repo_cache_dir(inv.repo)
+    if not repo_dir.exists():
+        repo_dir = repo_mgr.clone_or_fetch(inv.repo)
+
+    test_source = attempts[-1].test_source
+    print(f"[ReproLens] Launching automated git bisect for {inv_id} on {inv.repo}...")
+    engine = GitBisectEngine(repo_dir=repo_dir, db=db)
+    result = engine.bisect(
+        investigation_id=inv.id,
+        buggy_commit=inv.commit_sha or "HEAD",
+        test_source=test_source,
+    )
+
+    print("\n[Bisect Complete!]")
+    print(f"Culprit Commit:  {result.culprit_commit}")
+    print(f"Commit Message:  {result.culprit_message}")
+    print(f"Author:          {result.culprit_author}")
+    print(f"Steps Tested:    {result.steps_count} revisions in {result.duration_sec:.2f}s")
+    return 0 if result.success else 1
+
+
+def cmd_patch(args: argparse.Namespace) -> int:
+    """Generate and validate candidate patch for an investigation."""
+    from reprolens.patching import run_patch_cli
+
+    return run_patch_cli(args.investigation_id, patch_file=args.patch_file)
+
+
 def cmd_investigate(args: argparse.Namespace) -> int:
     """Run an investigation in background worker process."""
     inv_id = args.investigation_id
@@ -92,6 +139,19 @@ def main(argv: list[str] | None = None) -> int:
     repro_parser.add_argument("--repo", help="Target git repository URL", default=None)
     repro_parser.add_argument("--commit", help="Target commit SHA", default=None)
     repro_parser.set_defaults(func=cmd_reproduce)
+
+    # bisect
+    bisect_parser = subparsers.add_parser("bisect", help="Run automated git bisect")
+    bisect_parser.add_argument("investigation_id", help="Investigation ID with reproduced test")
+    bisect_parser.set_defaults(func=cmd_bisect)
+
+    # patch
+    patch_parser = subparsers.add_parser("patch", help="Generate and validate candidate fix patch")
+    patch_parser.add_argument("investigation_id", help="Investigation ID to validate patch for")
+    patch_parser.add_argument(
+        "--patch-file", help="Optional path to existing patch diff", default=None
+    )
+    patch_parser.set_defaults(func=cmd_patch)
 
     # evaluate
     eval_parser = subparsers.add_parser("evaluate", help="Run benchmark evaluation")

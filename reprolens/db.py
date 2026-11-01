@@ -150,7 +150,7 @@ class Database:
     """ReproLens SQLite storage manager."""
 
     def __init__(self, db_path: Path | str | None = None) -> None:
-        self.db_path = Path(db_path or Config.DB_PATH)
+        self.db_path = Path(db_path or Config.get_db_path())
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self.init_db()
 

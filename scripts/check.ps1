@@ -22,7 +22,7 @@ Write-Host "=== [4/6] Unit & Integration Tests (excluding live Docker) ===" -For
 if ($LASTEXITCODE -ne 0) { Write-Error "Pytest failed"; exit 1 }
 
 Write-Host "=== [5/6] Secret Scan ===" -ForegroundColor Cyan
-$matches = git grep -i -E "sk-ant-|sk-or-v1-[0-9a-f]{64}|ghp_[A-Za-z0-9]{36}" -- ":(exclude).env.example" ":(exclude)docs/MASTER_PROMPT.md"
+$matches = git grep -i -E "sk-ant-|sk-or-v1-[0-9a-f]{64}|ghp_[A-Za-z0-9]{36}" -- ":(exclude).env.example" ":(exclude)docs/MASTER_PROMPT.md" ":(exclude)scripts/check.ps1" ":(exclude)scripts/check.sh"
 if ($matches) {
     Write-Error "Potential secrets found in tracked files!"
     exit 1
@@ -38,3 +38,4 @@ try {
 }
 
 Write-Host "`nAll Quality Gate Checks Passed Successfully!" -ForegroundColor Green
+

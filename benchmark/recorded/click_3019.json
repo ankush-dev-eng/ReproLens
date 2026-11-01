@@ -1,0 +1,17 @@
+{
+  "case_id": "click-3019",
+  "repo": "pallets/click",
+  "issue_url": "https://github.com/pallets/click/issues/3019",
+  "base_commit": "27aaed3fe5bcd6adedd6e91de234914af9859cf1",
+  "run_date": "2026-11-01T06:00:00Z",
+  "model_id": "anthropic/claude-3.5-sonnet",
+  "execution_origin": "recorded",
+  "status": "REPRODUCED",
+  "test_source": "import io\nimport click\nimport pytest\n\nEXPECTED_SYMPTOM = {\n    \"exception_type\": \"AssertionError\",\n    \"message_regex\": \"Prompt with no suffix\",\n    \"description\": \"click.prompt appends trailing space when prompt_suffix is empty\",\n    \"target_symbols\": [\"click.termui.prompt\"],\n}\n\ndef test_reproduce_issue(monkeypatch, capfd):\n    monkeypatch.setattr(\"sys.stdin\", io.StringIO(\"input_val\\n\"))\n    click.prompt(\"Prompt with no suffix\", prompt_suffix=\"\")\n    out, _ = capfd.readouterr()\n    assert out == \"Prompt with no suffix\"\n",
+  "exit_code": 1,
+  "stdout": "============================= test session starts =============================\ncollected 1 item\n\ntest_repro_issue_3019.py F                                               [100%]\n\n=================================== FAILURES ===================================\n_____________________________ test_reproduce_issue _____________________________\n\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object>\ncapfd = <_pytest.capture.CaptureFixture object>\n\n    def test_reproduce_issue(monkeypatch, capfd):\n        monkeypatch.setattr(\"sys.stdin\", io.StringIO(\"input_val\\n\"))\n        click.prompt(\"Prompt with no suffix\", prompt_suffix=\"\")\n        out, _ = capfd.readouterr()\n>       assert out == \"Prompt with no suffix\"\nE       AssertionError: assert 'Prompt with no suffix ' == 'Prompt with no suffix'\nE         - Prompt with no suffix\nE         + Prompt with no suffix \nE         ?                      +\n\nclick/termui.py:141: in prompt\n    return f(\" \")\ntest_repro_issue_3019.py:17: AssertionError\n=========================== short test summary info ===========================\nFAILED test_repro_issue_3019.py::test_reproduce_issue - AssertionError: assert 'Prompt with no suffix ' == 'Prompt with no suffix'\n============================== 1 failed in 0.14s ==============================",
+  "stderr": "",
+  "duration_sec": 0.32,
+  "is_timeout": false
+}
+

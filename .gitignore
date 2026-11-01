@@ -68,6 +68,7 @@ tmp/
 temp/
 _temp/
 cache_repos/
+.cache_repos/
 
 # IDE / Editor artifacts
 .idea/

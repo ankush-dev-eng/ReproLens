@@ -14,10 +14,13 @@ load_dotenv()
 def _get_setting(key: str, default: str = "") -> str:
     """Retrieve setting from Streamlit secrets (if active) with fallback to env vars."""
     try:
-        import streamlit as st
+        import streamlit.runtime as st_runtime
 
-        if hasattr(st, "secrets") and key in st.secrets:
-            return str(st.secrets[key])
+        if st_runtime.exists():
+            import streamlit as st
+
+            if hasattr(st, "secrets") and key in st.secrets:
+                return str(st.secrets[key])
     except Exception:
         pass
     return os.environ.get(key, default)
@@ -28,7 +31,14 @@ class Config:
 
     # Paths
     PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent
-    DB_PATH: Path = Path(_get_setting("REPROLENS_DB_PATH", str(PROJECT_ROOT / "reprolens.db")))
+
+    @classmethod
+    def get_db_path(cls) -> Path:
+        return Path(_get_setting("REPROLENS_DB_PATH", str(cls.PROJECT_ROOT / "reprolens.db")))
+
+    @property
+    def DB_PATH(self) -> Path:  # noqa: N802
+        return self.get_db_path()
 
     # LLM & OpenRouter
     OPENROUTER_API_KEY: str = _get_setting("OPENROUTER_API_KEY", "")

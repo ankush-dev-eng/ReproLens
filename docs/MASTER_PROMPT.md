@@ -263,3 +263,4 @@ Write `docs/DEPLOYMENT.md` with exact click-by-click steps: open the deploy URL,
 **Final report to the user** (end of run): what works (each claim backed by a command you ran), what was not run and why, benchmark numbers exactly as measured, remaining manual steps (auth, Docker, secrets, deploy clicks), commit hashes for `develop` and `main`, and a suggested demo script for the 5–7 minute video using only features that actually work — including one case where ReproLens honestly refuses.
 
 **Begin now:** save this prompt to `docs/MASTER_PROMPT.md`, run the environment checks, and start M0.
+

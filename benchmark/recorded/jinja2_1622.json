@@ -1,0 +1,16 @@
+{
+  "case_id": "jinja2-1622",
+  "repo": "pallets/jinja",
+  "issue_url": "https://github.com/pallets/jinja/issues/1622",
+  "base_commit": "989cf8ea8b4e7a83d47f9f257d079632ebcaeb45",
+  "run_date": "2026-11-01T06:00:00Z",
+  "model_id": "anthropic/claude-3.5-sonnet",
+  "execution_origin": "recorded",
+  "status": "REPRODUCED",
+  "test_source": "from jinja2.sandbox import SandboxedEnvironment, SecurityError\nimport pytest\n\nEXPECTED_SYMPTOM = {\n    \"exception_type\": \"SecurityError\",\n    \"message_regex\": \"access to attribute .* is unsafe\",\n    \"description\": \"Jinja SandboxedEnvironment access to unsafe attribute format_map\",\n    \"target_symbols\": [\"jinja2.sandbox.SandboxedEnvironment.is_safe_attribute\"],\n}\n\ndef test_reproduce_issue():\n    env = SandboxedEnvironment()\n    tmpl = env.from_string(\"{{ ''.format_map }}\")\n    tmpl.render()\n",
+  "exit_code": 1,
+  "stdout": "============================= test session starts =============================\ncollected 1 item\n\ntest_repro_issue_1622.py F                                               [100%]\n\n=================================== FAILURES ===================================\n_____________________________ test_reproduce_issue _____________________________\n\n    def test_reproduce_issue():\n        env = SandboxedEnvironment()\n        tmpl = env.from_string(\"{{ ''.format_map }}\")\n>       tmpl.render()\n\nsrc/jinja2/sandbox.py:322: in is_safe_attribute\n    raise SecurityError(f\"access to attribute '{attr}' is unsafe\")\nE   jinja2.exceptions.SecurityError: access to attribute 'format_map' is unsafe\n=========================== short test summary info ===========================\nFAILED test_repro_issue_1622.py::test_reproduce_issue - jinja2.exceptions.SecurityError: access to attribute 'format_map' is unsafe\n============================== 1 failed in 0.25s ==============================",
+  "stderr": "",
+  "duration_sec": 0.38,
+  "is_timeout": false
+}

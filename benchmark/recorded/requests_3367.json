@@ -1,0 +1,16 @@
+{
+  "case_id": "requests-3367",
+  "repo": "psf/requests",
+  "issue_url": "https://github.com/psf/requests/issues/3367",
+  "base_commit": "e2c88d8b671e72e18fa4d99430fd6a10deffb9b0",
+  "run_date": "2026-11-01T06:00:00Z",
+  "model_id": "anthropic/claude-3.5-sonnet",
+  "execution_origin": "recorded",
+  "status": "REPRODUCED",
+  "test_source": "import requests\nimport pytest\n\nEXPECTED_SYMPTOM = {\n    \"exception_type\": \"TypeError\",\n    \"message_regex\": \"can't concat str to bytes\",\n    \"description\": \"Chunked upload throws TypeError when generator yields unicode strings\",\n    \"target_symbols\": [\"requests.models.PreparedRequest.prepare_body\"],\n}\n\ndef test_reproduce_issue():\n    def gen():\n        yield 'chunk1'\n        yield 'chunk2'\n    req = requests.Request('POST', 'http://httpbin.org/post', data=gen())\n    p = req.prepare()\n    assert p.body is not None\n",
+  "exit_code": 1,
+  "stdout": "============================= test session starts =============================\ncollected 1 item\n\ntest_repro_issue_3367.py F                                               [100%]\n\n=================================== FAILURES ===================================\n_____________________________ test_reproduce_issue _____________________________\n\n    def test_reproduce_issue():\n        def gen():\n            yield 'chunk1'\n            yield 'chunk2'\n        req = requests.Request('POST', 'http://httpbin.org/post', data=gen())\n>       p = req.prepare()\n\nrequests/models.py:472: in prepare\n    self.prepare_body(data, files, json)\nrequests/models.py:495: in prepare_body\n    body = body + chunk\nE   TypeError: can't concat str to bytes\n=========================== short test summary info ===========================\nFAILED test_repro_issue_3367.py::test_reproduce_issue - TypeError: can't concat str to bytes\n============================== 1 failed in 0.22s ==============================",
+  "stderr": "",
+  "duration_sec": 0.35,
+  "is_timeout": false
+}
