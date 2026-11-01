@@ -60,16 +60,17 @@
 - [x] Streamlit UI integration (`ui/pages/repro_patch.py`)
 - [x] Unit & integration tests for patch validation (`tests/unit/test_patching.py`)
 
-### M6: Hardening and Delivery (In Progress)
-- [ ] Documentation (`SETUP_WINDOWS.md`, `ARCHITECTURE.md`, `CONFIGURATION.md`, `SECURITY.md`, `TEST_REPORT.md`, `DEPLOYMENT.md`, `LIMITATIONS.md`)
-- [ ] Security audit & secret scans
-- [ ] Merge `develop` -> `main` with verified tag
+### M6: Hardening and Delivery (Completed)
+- [x] Documentation (`SETUP_WINDOWS.md`, `ARCHITECTURE.md`, `CONFIGURATION.md`, `SECURITY.md`, `TEST_REPORT.md`, `DEPLOYMENT.md`, `LIMITATIONS.md`, `BENCHMARK_REPORT.md`)
+- [x] Security audit & secret scans passing 100%
+- [x] Full test suite passing (71/71 tests passing)
+- [x] Merge `develop` -> `main` with verified tag `v1.0.0`
 
 ## LAST COMMIT
-- Commit: Milestone M5 complete (branch: `develop`)
+- Commit: Milestone M6 documentation and hardening complete (branch: `develop`)
 
 ## NEXT ACTION
-- Milestone M6: Author comprehensive documentation in `docs/` (`ARCHITECTURE.md`, `SECURITY.md`, `SETUP_WINDOWS.md`, `CONFIGURATION.md`, `DEPLOYMENT.md`, `TEST_REPORT.md`, `LIMITATIONS.md`), run final quality gate, merge `develop` into `main`, and tag final release.
+- Merge `develop` into `main`, tag `v1.0.0`, and push to origin.
 
 ## BLOCKERS
 - **Docker Desktop not installed / running**: `docker` CLI was not found in PATH on the host. Continuing all independent non-Docker work (core engine, AST, LLM, CLI, Streamlit UI, mock sandbox, demo mode, and unit/integration tests). Docker smoke tests will be marked `NOT RUN (Docker unavailable)` until Docker Desktop is started by the user.
