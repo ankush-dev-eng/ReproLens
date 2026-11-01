@@ -47,11 +47,13 @@
 - [x] Generate real, audited `docs/BENCHMARK_REPORT.md`
 - [x] Evaluation unit tests (`tests/unit/test_evaluation.py`)
 
-### M4: Git Bisect (In Progress)
-- [ ] Backward search & binary search over worktrees (`bisect.py`)
-- [ ] Unit & integration tests for bisect
+### M4: Git Bisect (Completed)
+- [x] Backward search & binary search over worktrees (`bisect.py`)
+- [x] CLI command (`reprolens bisect <inv_id>`)
+- [x] Streamlit UI integration (`ui/pages/git_history.py`)
+- [x] Unit & integration tests for bisect (`tests/unit/test_bisect.py`)
 
-### M5: Patch Generation & Validation
+### M5: Patch Generation & Validation (In Progress)
 - [ ] Unified diff generation & validation runner (`patching.py`)
 - [ ] Full regression check verification
 
@@ -61,10 +63,10 @@
 - [ ] Merge `develop` -> `main` with verified tag
 
 ## LAST COMMIT
-- Commit: Milestone M3 complete (branch: `develop`)
+- Commit: Milestone M4 complete (branch: `develop`)
 
 ## NEXT ACTION
-- Milestone M4: Implement automated git bisect engine (`reprolens/bisect.py`) with backward search, binary search in isolated worktrees, skip (exit 125) handling, and tests.
+- Milestone M5: Implement 4-gate patch generation and validation engine (`reprolens/patching.py`), CLI command `reprolens patch`, and patch validation tests.
 
 ## BLOCKERS
 - **Docker Desktop not installed / running**: `docker` CLI was not found in PATH on the host. Continuing all independent non-Docker work (core engine, AST, LLM, CLI, Streamlit UI, mock sandbox, demo mode, and unit/integration tests). Docker smoke tests will be marked `NOT RUN (Docker unavailable)` until Docker Desktop is started by the user.

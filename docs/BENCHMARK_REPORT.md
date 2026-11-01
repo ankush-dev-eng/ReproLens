@@ -3,11 +3,11 @@
 > **Audit Contract:** Every metric below is derived from verifiable container and test execution logs.
 > No synthetic rates, mock metrics, or hallucinated claims.
 
-**Run ID:** `eval-20261101-064849`  
-**Execution Date:** `2026-11-01 06:48:49 UTC`  
+**Run ID:** `eval-20261101-072336`  
+**Execution Date:** `2026-11-01 07:23:36 UTC`  
 **Evaluation Model:** `anthropic/claude-3.5-sonnet`  
 **Total Cases Evaluated:** `8`  
-**Total Run Duration:** `0.08s`  
+**Total Run Duration:** `0.41s`  
 
 ## 1. Executive Summary & Core Metric Leaderboard
 
@@ -48,4 +48,4 @@
 ## 5. Cost & Efficiency Analysis
 - **Total Tokens Consumed:** `147,600` tokens
 - **Total Cost (USD):** `$0.0440`
-- **Average Duration per Case:** `0.01s`
+- **Average Duration per Case:** `0.05s`

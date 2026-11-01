@@ -2,7 +2,9 @@
 
 import streamlit as st
 
+from reprolens.bisect import GitBisectEngine
 from reprolens.db import Database
+from reprolens.repo import RepositoryManager
 from ui.theme import render_header
 
 render_header()
@@ -16,7 +18,7 @@ db = Database()
 investigations = db.list_investigations()
 
 if not investigations:
-    st.info("No investigations recorded.")
+    st.info("No investigations recorded. Start one in the 'New Investigation' page.")
     st.stop()
 
 inv_ids = [inv.id for inv in investigations]
@@ -43,6 +45,8 @@ with col_link:
     if st.button("🔬 Go to Workspace", use_container_width=True):
         st.switch_page("ui/pages/workspace.py")
 
+inv = db.get_investigation(selected_id)
+attempts = db.list_attempts(selected_id)
 runs = db.list_bisect_runs(selected_id)
 
 st.subheader("Bisection Strategy")
@@ -55,27 +59,48 @@ st.markdown(
     """
 )
 
+col_act, _ = st.columns([2, 2])
+with col_act:
+    if st.button("🌿 Launch Automated Bisect", type="primary", use_container_width=True):
+        if not attempts:
+            st.error("No minimal reproducer test available for this investigation yet.")
+        else:
+            with st.spinner("Executing bisection search in isolated worktrees..."):
+                try:
+                    repo_mgr = RepositoryManager()
+                    repo_dir = repo_mgr.get_repo_cache_dir(inv.repo)
+                    if not repo_dir.exists():
+                        repo_dir = repo_mgr.clone_or_fetch(inv.repo)
+
+                    engine = GitBisectEngine(repo_dir=repo_dir, db=db)
+                    result = engine.bisect(
+                        investigation_id=inv.id,
+                        buggy_commit=inv.commit_sha or "HEAD",
+                        test_source=attempts[-1].test_source,
+                    )
+                    st.success(f"🎯 Culprit Commit Isolated: `{result.culprit_commit}`")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Bisect failed: {e}")
+
 if not runs:
-    st.info(
-        f"No automated bisect runs logged for investigation `{selected_id}` yet. "
-        "Click below to launch bisection against repository history."
-    )
-    if st.button("🌿 Launch Automated Bisect", type="primary"):
-        st.info("Starting bisection search in isolated worktree...")
-        st.write("Step 1: Testing buggy commit `27aaed3` -> FAIL (3/3)")
-        st.write("Step 2: Testing commit 4 revisions prior `1a99f4c` -> PASS (3/3)")
-        st.write("Step 3: Binary search narrowing down to culprit...")
-        st.success("🎯 Culprit identified: `27aaed3fe5bcd6adedd6e91de234914af9859cf1`")
+    st.info(f"No automated bisect runs logged for investigation `{selected_id}` yet.")
 else:
-    st.subheader("Tested Commit Timeline")
+    st.subheader(f"Tested Commit Timeline ({len(runs)} revisions)")
     for r in runs:
-        col1, col2, col3 = st.columns([3, 2, 2])
-        with col1:
-            st.code(r.commit_sha[:10])
-        with col2:
-            st.write(f"Status: **{r.status}**")
-        with col3:
-            st.caption(
-                f"Passed: {r.pass_count}/{r.run_count} | Failed: {r.fail_count}/{r.run_count}"
+        with st.container(border=True):
+            col1, col2, col3 = st.columns([3, 2, 2])
+            status_color = (
+                "#34D399" if r.status == "good" else ("#F87171" if r.status == "bad" else "#FBBF24")
             )
-        st.divider()
+            with col1:
+                st.code(r.commit_sha[:10], language="text")
+            with col2:
+                st.markdown(
+                    f"Status: <b style='color: {status_color};'>{r.status.upper()}</b>",
+                    unsafe_allow_html=True,
+                )
+            with col3:
+                st.caption(
+                    f"Passed: {r.pass_count}/{r.run_count} | Failed: {r.fail_count}/{r.run_count}"
+                )
