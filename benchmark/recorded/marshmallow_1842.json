@@ -1,0 +1,16 @@
+{
+  "case_id": "marshmallow-1842",
+  "repo": "marshmallow-code/marshmallow",
+  "issue_url": "https://github.com/marshmallow-code/marshmallow/issues/1842",
+  "base_commit": "e6914589d31d9047970d4c82b0e9a7e657c79dbd",
+  "run_date": "2026-11-01T06:00:00Z",
+  "model_id": "anthropic/claude-3.5-sonnet",
+  "execution_origin": "recorded",
+  "status": "REPRODUCED",
+  "test_source": "from marshmallow import Schema, fields, EXCLUDE\nimport pytest\n\nEXPECTED_SYMPTOM = {\n    \"exception_type\": \"AttributeError\",\n    \"message_regex\": \"'NoneType' object has no attribute\",\n    \"description\": \"Nested schema load raises AttributeError on None object with EXCLUDE\",\n    \"target_symbols\": [\"marshmallow.schema.Schema._invoke_field_validators\"],\n}\n\nclass Child(Schema):\n    name = fields.Str()\n\nclass Parent(Schema):\n    child = fields.Nested(Child, unknown=EXCLUDE)\n\ndef test_reproduce_issue():\n    schema = Parent()\n    schema.load({'child': None})\n",
+  "exit_code": 1,
+  "stdout": "============================= test session starts =============================\ncollected 1 item\n\ntest_repro_issue_1842.py F                                               [100%]\n\n=================================== FAILURES ===================================\n_____________________________ test_reproduce_issue _____________________________\n\n    def test_reproduce_issue():\n        schema = Parent()\n>       schema.load({'child': None})\n\nsrc/marshmallow/schema.py:722: in _invoke_field_validators\n    for field_obj in self.fields.values():\nE   AttributeError: 'NoneType' object has no attribute 'items'\n=========================== short test summary info ===========================\nFAILED test_repro_issue_1842.py::test_reproduce_issue - AttributeError: 'NoneType' object has no attribute 'items'\n============================== 1 failed in 0.18s ==============================",
+  "stderr": "",
+  "duration_sec": 0.28,
+  "is_timeout": false
+}

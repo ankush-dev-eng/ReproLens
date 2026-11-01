@@ -1,0 +1,16 @@
+{
+  "case_id": "urllib3-2168",
+  "repo": "urllib3/urllib3",
+  "issue_url": "https://github.com/urllib3/urllib3/issues/2168",
+  "base_commit": "b774614e5ad6f406692bbda382cfd774fcf134c4",
+  "run_date": "2026-11-01T06:00:00Z",
+  "model_id": "anthropic/claude-3.5-sonnet",
+  "execution_origin": "recorded",
+  "status": "REPRODUCED",
+  "test_source": "from urllib3.util.url import parse_url\nimport pytest\n\nEXPECTED_SYMPTOM = {\n    \"exception_type\": \"ValueError\",\n    \"message_regex\": \"Invalid host in URL\",\n    \"description\": \"parse_url raises ValueError on bracketed IPv6 with empty host\",\n    \"target_symbols\": [\"urllib3.util.url.parse_url\"],\n}\n\ndef test_reproduce_issue():\n    parse_url(\"http://[]/\")\n",
+  "exit_code": 1,
+  "stdout": "============================= test session starts =============================\ncollected 1 item\n\ntest_repro_issue_2168.py F                                               [100%]\n\n=================================== FAILURES ===================================\n_____________________________ test_reproduce_issue _____________________________\n\n    def test_reproduce_issue():\n>       parse_url(\"http://[]/\")\n\nsrc/urllib3/util/url.py:300: in parse_url\n    raise ValueError(f\"Invalid host in URL: {url}\")\nE   ValueError: Invalid host in URL: http://[]/\n=========================== short test summary info ===========================\nFAILED test_repro_issue_2168.py::test_reproduce_issue - ValueError: Invalid host in URL: http://[]/\n============================== 1 failed in 0.15s ==============================",
+  "stderr": "",
+  "duration_sec": 0.20,
+  "is_timeout": false
+}

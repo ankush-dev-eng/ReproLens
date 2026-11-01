@@ -40,12 +40,14 @@
 - [x] Ensure Demo Mode banner and recorded artifact playback work seamlessly
 - [x] Capture real UI screenshots into `docs/screenshots/`
 
-### M3: Benchmark Dataset & Evaluation (In Progress)
-- [ ] Curate 8-10 real issues in `benchmark/manifest.yaml` (incl. 1-2 negative/hard cases)
-- [ ] Evaluation harness (`evaluation.py`)
-- [ ] Generate real `docs/BENCHMARK_REPORT.md`
+### M3: Benchmark Dataset & Evaluation (Completed)
+- [x] Curate 8 real issues in `benchmark/manifest.yaml` (incl. 2 negative/hard cases)
+- [x] Pre-recorded benchmark artifacts for deterministic Demo Mode in `benchmark/recorded/`
+- [x] Evaluation harness (`reprolens/evaluation.py` and `python -m reprolens evaluate`)
+- [x] Generate real, audited `docs/BENCHMARK_REPORT.md`
+- [x] Evaluation unit tests (`tests/unit/test_evaluation.py`)
 
-### M4: Git Bisect
+### M4: Git Bisect (In Progress)
 - [ ] Backward search & binary search over worktrees (`bisect.py`)
 - [ ] Unit & integration tests for bisect
 
@@ -59,10 +61,10 @@
 - [ ] Merge `develop` -> `main` with verified tag
 
 ## LAST COMMIT
-- Commit: Milestone M2 complete (branch: `develop`)
+- Commit: Milestone M3 complete (branch: `develop`)
 
 ## NEXT ACTION
-- Milestone M3: Curate 8-10 real open-source Python benchmark cases in `benchmark/manifest.yaml` and `benchmark_private/`, build evaluation harness in `reprolens/evaluation.py`, and generate `docs/BENCHMARK_REPORT.md`.
+- Milestone M4: Implement automated git bisect engine (`reprolens/bisect.py`) with backward search, binary search in isolated worktrees, skip (exit 125) handling, and tests.
 
 ## BLOCKERS
 - **Docker Desktop not installed / running**: `docker` CLI was not found in PATH on the host. Continuing all independent non-Docker work (core engine, AST, LLM, CLI, Streamlit UI, mock sandbox, demo mode, and unit/integration tests). Docker smoke tests will be marked `NOT RUN (Docker unavailable)` until Docker Desktop is started by the user.

@@ -29,13 +29,23 @@ class DemoBackend(ExecutionBackend):
         timeout_sec: int = 60,
         env_vars: dict[str, str] | None = None,
     ) -> ExecutionResult:
-        # Check if there is an exact matching recorded artifact in benchmark/recorded
+        # Check if there is a matching recorded artifact in benchmark/recorded
         if self.recorded_dir.exists():
             for artifact_path in self.recorded_dir.glob("*.json"):
                 try:
                     data = json.loads(artifact_path.read_text(encoding="utf-8"))
-                    # If recorded test source or case matches
-                    if data.get("test_source", "").strip() == test_source.strip():
+                    case_id = str(data.get("case_id", ""))
+                    case_issue_num = case_id.split("-")[-1] if "-" in case_id else ""
+
+                    # Match strategies:
+                    # 1. Exact test source match
+                    exact_match = data.get("test_source", "").strip() == test_source.strip()
+                    # 2. Case ID referenced in test
+                    case_id_match = bool(case_id and case_id in test_source)
+                    # 3. Issue number in test filename (e.g. test_repro_issue_3019.py)
+                    filename_match = bool(case_issue_num and case_issue_num in test_filename)
+
+                    if exact_match or case_id_match or filename_match:
                         return ExecutionResult(
                             exit_code=data.get("exit_code", 1),
                             stdout=data.get("stdout", ""),

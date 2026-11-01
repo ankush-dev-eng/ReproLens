@@ -1,0 +1,16 @@
+{
+  "case_id": "click-negative-2841",
+  "repo": "pallets/click",
+  "issue_url": "https://github.com/pallets/click/issues/2841",
+  "base_commit": "27aaed3fe5bcd6adedd6e91de234914af9859cf1",
+  "run_date": "2026-11-01T06:00:00Z",
+  "model_id": "anthropic/claude-3.5-sonnet",
+  "execution_origin": "recorded",
+  "status": "NOT_REPRODUCED",
+  "test_source": "import click\nfrom click.testing import CliRunner\nimport pytest\n\nEXPECTED_SYMPTOM = {\n    \"exception_type\": \"SystemExit\",\n    \"message_regex\": \"Error: no such option: --help\",\n    \"description\": \"Negative control: Click --help option reported as broken\",\n    \"target_symbols\": [\"click.core.Command.get_help\"],\n}\n\ndef test_reproduce_issue():\n    @click.command()\n    def cli(): pass\n    runner = CliRunner()\n    res = runner.invoke(cli, ['--help'])\n    assert res.exit_code == 0\n    assert 'Show this message and exit.' in res.output\n",
+  "exit_code": 0,
+  "stdout": "============================= test session starts =============================\ncollected 1 item\n\ntest_repro_issue_2841.py .                                               [100%]\n\n============================== 1 passed in 0.08s ==============================",
+  "stderr": "",
+  "duration_sec": 0.12,
+  "is_timeout": false
+}

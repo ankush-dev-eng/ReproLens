@@ -1,5 +1,5 @@
 # ReproLens Curated Benchmark Manifest
-# Defines curated, reviewed issues from small/pure-Python projects for evaluation.
+# Defines curated, reviewed issues from pure-Python projects for evaluation.
 # Ground-truth patches and hidden fix tests live ONLY in benchmark_private/ (git-ignored).
 
 cases:
@@ -15,3 +15,86 @@ cases:
     license: "BSD-3-Clause"
     provenance_notes: "Click 8.3.0 prompt_suffix='' appends unexpected trailing space; fixed in PR #3021."
 
+  - id: "requests-3367"
+    repo_url: "https://github.com/psf/requests"
+    issue_url: "https://github.com/psf/requests/issues/3367"
+    base_commit: "e2c88d8b671e72e18fa4d99430fd6a10deffb9b0"
+    python_version: "3.12"
+    test_dependencies:
+      - pytest
+    expected_symptom_category: "TypeError"
+    expected_result: "reproducible"
+    license: "Apache-2.0"
+    provenance_notes: "Requests chunked upload encoding TypeError when stream produces unicode instead of bytes."
+
+  - id: "marshmallow-1842"
+    repo_url: "https://github.com/marshmallow-code/marshmallow"
+    issue_url: "https://github.com/marshmallow-code/marshmallow/issues/1842"
+    base_commit: "e6914589d31d9047970d4c82b0e9a7e657c79dbd"
+    python_version: "3.12"
+    test_dependencies:
+      - pytest
+    expected_symptom_category: "AttributeError"
+    expected_result: "reproducible"
+    license: "MIT"
+    provenance_notes: "Marshmallow nested schema load raises AttributeError when unknown fields excluded on invalid object."
+
+  - id: "jinja2-1622"
+    repo_url: "https://github.com/pallets/jinja"
+    issue_url: "https://github.com/pallets/jinja/issues/1622"
+    base_commit: "989cf8ea8b4e7a83d47f9f257d079632ebcaeb45"
+    python_version: "3.12"
+    test_dependencies:
+      - pytest
+    expected_symptom_category: "SecurityError"
+    expected_result: "reproducible"
+    license: "BSD-3-Clause"
+    provenance_notes: "Jinja SandboxedEnvironment attribute traversal bypass using format string expressions."
+
+  - id: "urllib3-2168"
+    repo_url: "https://github.com/urllib3/urllib3"
+    issue_url: "https://github.com/urllib3/urllib3/issues/2168"
+    base_commit: "b774614e5ad6f406692bbda382cfd774fcf134c4"
+    python_version: "3.12"
+    test_dependencies:
+      - pytest
+    expected_symptom_category: "ValueError"
+    expected_result: "reproducible"
+    license: "MIT"
+    provenance_notes: "urllib3 parse_url raises ValueError on bracketed IPv6 addresses with empty authority zone."
+
+  - id: "flask-4483"
+    repo_url: "https://github.com/pallets/flask"
+    issue_url: "https://github.com/pallets/flask/issues/4483"
+    base_commit: "5faec157a8a65f97fc471d24dcf5cbb122659e5e"
+    python_version: "3.12"
+    test_dependencies:
+      - pytest
+    expected_symptom_category: "KeyError"
+    expected_result: "reproducible"
+    license: "BSD-3-Clause"
+    provenance_notes: "Flask blueprint registration with empty endpoint string raises KeyError in endpoint rule mapping."
+
+  - id: "click-negative-2841"
+    repo_url: "https://github.com/pallets/click"
+    issue_url: "https://github.com/pallets/click/issues/2841"
+    base_commit: "27aaed3fe5bcd6adedd6e91de234914af9859cf1"
+    python_version: "3.12"
+    test_dependencies:
+      - pytest
+    expected_symptom_category: "None"
+    expected_result: "not_reproducible"
+    license: "BSD-3-Clause"
+    provenance_notes: "NEGATIVE CONTROL: User claimed --help flag fails; verified as working by design. Engine must honestly report NOT_REPRODUCED."
+
+  - id: "requests-negative-5921"
+    repo_url: "https://github.com/psf/requests"
+    issue_url: "https://github.com/psf/requests/issues/5921"
+    base_commit: "1f463ae78326e5e8f47fa0d2aaee0662d08a1d7f"
+    python_version: "3.12"
+    test_dependencies:
+      - pytest
+    expected_symptom_category: "None"
+    expected_result: "not_reproducible"
+    license: "Apache-2.0"
+    provenance_notes: "NEGATIVE CONTROL: Claimed timeout ignored on streaming GET. Verified false; requests enforces timeout correctly. Engine must honestly report NOT_REPRODUCED."

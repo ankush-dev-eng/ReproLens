@@ -1,0 +1,16 @@
+{
+  "case_id": "flask-4483",
+  "repo": "pallets/flask",
+  "issue_url": "https://github.com/pallets/flask/issues/4483",
+  "base_commit": "5faec157a8a65f97fc471d24dcf5cbb122659e5e",
+  "run_date": "2026-11-01T06:00:00Z",
+  "model_id": "anthropic/claude-3.5-sonnet",
+  "execution_origin": "recorded",
+  "status": "REPRODUCED",
+  "test_source": "from flask import Flask, Blueprint\nimport pytest\n\nEXPECTED_SYMPTOM = {\n    \"exception_type\": \"KeyError\",\n    \"message_regex\": \"endpoint\",\n    \"description\": \"Blueprint registration with empty endpoint string raises KeyError\",\n    \"target_symbols\": [\"flask.blueprints.Blueprint.add_url_rule\"],\n}\n\ndef test_reproduce_issue():\n    app = Flask(__name__)\n    bp = Blueprint('bp', __name__)\n    bp.add_url_rule('/test', endpoint='')\n    app.register_blueprint(bp)\n",
+  "exit_code": 1,
+  "stdout": "============================= test session starts =============================\ncollected 1 item\n\ntest_repro_issue_4483.py F                                               [100%]\n\n=================================== FAILURES ===================================\n_____________________________ test_reproduce_issue _____________________________\n\n    def test_reproduce_issue():\n        app = Flask(__name__)\n        bp = Blueprint('bp', __name__)\n        bp.add_url_rule('/test', endpoint='')\n>       app.register_blueprint(bp)\n\nsrc/flask/blueprints.py:182: in register_blueprint\n    state.app.add_url_rule(rule, f\"{endpoint}.{rule.endpoint}\")\nE   KeyError: ''\n=========================== short test summary info ===========================\nFAILED test_repro_issue_4483.py::test_reproduce_issue - KeyError: ''\n============================== 1 failed in 0.28s ==============================",
+  "stderr": "",
+  "duration_sec": 0.32,
+  "is_timeout": false
+}

@@ -182,7 +182,7 @@ class EvalRun(BaseModel):
     """Benchmark evaluation summary record."""
 
     id: str
-    run_date: datetime = Field(default_factory=datetime.utcnow)
+    run_date: datetime = Field(default_factory=_utc_now)
     model_id: str
     total_cases: int = 0
     reproduced_count: int = 0
