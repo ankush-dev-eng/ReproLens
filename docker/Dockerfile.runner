@@ -1,0 +1,21 @@
+# Base Runner Dockerfile for ReproLens
+# Minimal, isolated environment with non-root user (UID 10001)
+
+FROM python:3.12-slim
+
+# Create non-root user and group
+RUN groupadd -g 10001 reprolens && \
+    useradd -u 10001 -g reprolens -m -s /bin/bash reprolens
+
+# Install minimal test runner dependencies
+RUN pip install --no-cache-dir \
+    pytest==8.3.4 \
+    pytest-timeout==2.3.1
+
+# Working directory inside container
+WORKDIR /workspace
+
+# Run as non-root
+USER 10001:10001
+
+CMD ["pytest", "--version"]

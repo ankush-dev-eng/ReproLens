@@ -1,0 +1,5 @@
+# ReproLens Curated Benchmark Manifest
+# Defines curated, reviewed issues from small/pure-Python projects for evaluation.
+# Ground-truth patches and hidden fix tests live ONLY in benchmark_private/ (git-ignored).
+
+cases: []
