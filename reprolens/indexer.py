@@ -22,6 +22,8 @@ EXCLUDED_DIRS = {
     "third_party",
     "node_modules",
     ".eggs",
+    "benchmark_private",
+    "benchmark",
 }
 
 

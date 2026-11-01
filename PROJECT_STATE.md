@@ -1,7 +1,7 @@
 # ReproLens Project State
 
 ## CURRENT MILESTONE
-- **M1 Vertical Slice**: Sandbox abstraction, GitHub ingestion, AST indexer & retrieval, OpenRouter LLM client, investigation orchestrator, test guard, reproduction loop, and classifier, verified on one real issue from the CLI.
+- **M1 Vertical Slice (Completed)** -> Next: **M2 Streamlit UI** (Binding all pages to real data, background worker polling, demo mode, and capturing UI screenshots).
 
 ## CHECKLIST
 ### M0: Bootstrap (Completed)
@@ -19,24 +19,26 @@
 - [x] Create quality gate scripts (`scripts/check.ps1` and `scripts/check.sh`)
 - [x] Verify clean test gate run, commit and push to `develop`
 
-### M1: Vertical Slice (In Progress)
-- [ ] Sandbox abstraction (`base.py`, `docker_backend.py`, `demo_backend.py`, `remote_adapter.py`)
-- [ ] GitHub ingestion (`github_client.py`)
-- [ ] Repository engine & AST indexer (`repo.py`, `indexer.py`, `retrieval.py`, `refs.py`)
-- [ ] OpenRouter LLM client (`llm/client.py`, `llm/prompts.py`, `llm/schemas.py`)
-- [ ] Test guard (`test_guard.py`)
-- [ ] Execution classifier (`classify.py`)
-- [ ] Reproduction loop (`repro_loop.py`)
-- [ ] Evidence ledger integration (`ledger.py`)
-- [ ] Investigation worker & CLI (`investigate.py`, `cli.py`)
-- [ ] Select first real benchmark issue and test end-to-end
-- [ ] Tag `v0.1-slice`
+### M1: Vertical Slice (Completed)
+- [x] Sandbox abstraction (`base.py`, `docker_backend.py`, `demo_backend.py`, `remote_adapter.py`)
+- [x] GitHub ingestion (`github_client.py`)
+- [x] Repository engine & AST indexer (`repo.py`, `indexer.py`, `retrieval.py`, `refs.py`)
+- [x] OpenRouter LLM client (`llm/client.py`, `llm/prompts.py`, `llm/schemas.py`)
+- [x] Test guard (`test_guard.py`)
+- [x] Execution classifier (`classify.py`)
+- [x] Reproduction loop (`repro_loop.py`)
+- [x] Evidence ledger integration (`ledger.py`)
+- [x] Investigation worker & CLI (`investigate.py`, `cli.py`)
+- [x] Curate first real benchmark issue (`pallets/click#3019`) and verify end-to-end CLI slice
+- [x] Benchmark leak guard test (`tests/unit/test_benchmark_guard.py`)
+- [x] Tag `v0.1-slice`
 
-### M2: Streamlit UI
-- [ ] Streamlit pages & components (`main.py`, `ui/`)
-- [ ] Background worker subprocess & DB polling
-- [ ] Demo Mode backend with pre-approved recorded artifacts
-- [ ] Capture UI screenshots into `docs/screenshots/`
+### M2: Streamlit UI (In Progress)
+- [ ] Connect Streamlit UI to real database and background worker subprocess
+- [ ] Implement live polling of SQLite database in Investigation Workspace
+- [ ] Wire up New Investigation submission to start background subprocess worker
+- [ ] Ensure Demo Mode banner and recorded artifact playback work seamlessly
+- [ ] Capture real UI screenshots into `docs/screenshots/`
 
 ### M3: Benchmark Dataset & Evaluation
 - [ ] Curate 8-10 real issues in `benchmark/manifest.yaml` (incl. 1-2 negative/hard cases)
@@ -57,10 +59,10 @@
 - [ ] Merge `develop` -> `main` with verified tag
 
 ## LAST COMMIT
-- Commit: `40bdb58` on branch `develop` (synchronized with `origin/develop` and `origin/main`)
+- Tag: `v0.1-slice` (branch: `develop`)
 
 ## NEXT ACTION
-- Implement `reprolens/sandbox/base.py`, `reprolens/sandbox/docker_backend.py`, and `reprolens/sandbox/demo_backend.py` with unit tests.
+- Milestone M2: Streamlit UI integration, real-time background worker polling, and screenshot generation.
 
 ## BLOCKERS
 - **Docker Desktop not installed / running**: `docker` CLI was not found in PATH on the host. Continuing all independent non-Docker work (core engine, AST, LLM, CLI, Streamlit UI, mock sandbox, demo mode, and unit/integration tests). Docker smoke tests will be marked `NOT RUN (Docker unavailable)` until Docker Desktop is started by the user.

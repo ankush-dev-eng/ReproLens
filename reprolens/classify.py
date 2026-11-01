@@ -20,23 +20,50 @@ class ClassificationResult:
     flaky_runs_summary: str = ""
 
 
-EXCEPTION_LINE_PATTERN = re.compile(
-    r"^([a-zA-Z_][a-zA-Z0-9_\.]*(?:Error|Exception|Warning|Interrupt|Exit))(?::\s*(.*))?$",
+PYTEST_FAILURE_SUMMARY_PATTERN = re.compile(
+    r"^FAILED\s+[^\s]+::[^\s]+\s+-\s+([a-zA-Z_][a-zA-Z0-9_\.]*(?:Error|Exception|AssertionError))(?::\s*(.*))?$",
     re.MULTILINE,
 )
 
-TRACEBACK_FRAME_PATTERN = re.compile(r'File "([^"]+)", line (\d+)(?:, in (\w+))?', re.IGNORECASE)
+PYTEST_E_LINE_PATTERN = re.compile(
+    r"^E\s+([a-zA-Z_][a-zA-Z0-9_\.]*(?:Error|Exception|AssertionError))(?::\s*(.*))?$",
+    re.MULTILINE,
+)
+
+STANDARD_EXC_PATTERN = re.compile(
+    r"^([a-zA-Z_][a-zA-Z0-9_\.]*(?:Error|Exception|Warning|Interrupt|Exit|AssertionError))(?::\s*(.*))?$",
+    re.MULTILINE,
+)
+
+STANDARD_TRACEBACK_PATTERN = re.compile(r'File "([^"]+)", line (\d+)(?:, in (\w+))?', re.IGNORECASE)
+
+PYTEST_FRAME_PATTERN = re.compile(
+    r"^([a-zA-Z0-9_\-/\\]+\.py):(\d+):\s+in\s+([a-zA-Z0-9_]+)",
+    re.MULTILINE,
+)
 
 
 def extract_failure_exception(output_text: str) -> tuple[str | None, str | None]:
     """Parse output to extract the root raised exception class and message."""
-    matches = list(EXCEPTION_LINE_PATTERN.finditer(output_text))
-    if not matches:
-        return None, None
-    last_match = matches[-1]
-    exc_type = last_match.group(1).split(".")[-1]
-    exc_msg = (last_match.group(2) or "").strip()
-    return exc_type, exc_msg
+    # 1. Prefer pytest summary failure line
+    sum_matches = list(PYTEST_FAILURE_SUMMARY_PATTERN.finditer(output_text))
+    if sum_matches:
+        last = sum_matches[-1]
+        return last.group(1).split(".")[-1], (last.group(2) or "").strip()
+
+    # 2. Prefer pytest 'E ' error line
+    e_matches = list(PYTEST_E_LINE_PATTERN.finditer(output_text))
+    if e_matches:
+        last = e_matches[-1]
+        return last.group(1).split(".")[-1], (last.group(2) or "").strip()
+
+    # 3. Standard exception line
+    std_matches = list(STANDARD_EXC_PATTERN.finditer(output_text))
+    if std_matches:
+        last = std_matches[-1]
+        return last.group(1).split(".")[-1], (last.group(2) or "").strip()
+
+    return None, None
 
 
 def has_frame_in_target_repo(
@@ -45,14 +72,21 @@ def has_frame_in_target_repo(
     known_repo_files: set[str] | None = None,
 ) -> bool:
     """Check if the traceback contains at least one frame inside the target repository code."""
-    frames = TRACEBACK_FRAME_PATTERN.findall(output_text)
+    frames: list[tuple[str, str]] = []
+
+    for path_str, line_no, _ in STANDARD_TRACEBACK_PATTERN.findall(output_text):
+        frames.append((path_str, line_no))
+
+    for match in PYTEST_FRAME_PATTERN.finditer(output_text):
+        frames.append((match.group(1), match.group(2)))
+
     if not frames:
         return False
 
-    for path_str, _, _ in frames:
+    for path_str, _ in frames:
         norm_path = path_str.replace("\\", "/")
         # Ignore frames inside the test script itself
-        if test_filename in norm_path:
+        if test_filename in norm_path or "test_repro" in norm_path:
             continue
         # Ignore python stdlib and virtualenv/site-packages
         if any(
@@ -63,8 +97,15 @@ def has_frame_in_target_repo(
 
         # If known_repo_files is provided, verify matching file
         if known_repo_files:
-            if any(norm_path.endswith(f) or f.endswith(norm_path) for f in known_repo_files):
-                return True
+            for f in known_repo_files:
+                norm_f = f.replace("\\", "/")
+                if (
+                    norm_path == norm_f
+                    or norm_f.endswith(norm_path)
+                    or norm_path.endswith(norm_f)
+                    or norm_path.split("/")[-1] == norm_f.split("/")[-1]
+                ):
+                    return True
         else:
             # Without explicit file list, non-stdlib/non-test frame is considered repo code
             return True

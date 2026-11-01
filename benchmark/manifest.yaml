@@ -2,4 +2,16 @@
 # Defines curated, reviewed issues from small/pure-Python projects for evaluation.
 # Ground-truth patches and hidden fix tests live ONLY in benchmark_private/ (git-ignored).
 
-cases: []
+cases:
+  - id: "click-3019"
+    repo_url: "https://github.com/pallets/click"
+    issue_url: "https://github.com/pallets/click/issues/3019"
+    base_commit: "27aaed3fe5bcd6adedd6e91de234914af9859cf1"
+    python_version: "3.12"
+    test_dependencies:
+      - pytest
+    expected_symptom_category: "AssertionError"
+    expected_result: "reproducible"
+    license: "BSD-3-Clause"
+    provenance_notes: "Click 8.3.0 prompt_suffix='' appends unexpected trailing space; fixed in PR #3021."
+
